@@ -1,5 +1,6 @@
 package cs9322.rest.coffee.cashier.resources;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
@@ -18,6 +19,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBElement;
 
+import cs9322.rest.coffee.cashier.data.Data;
 import cs9322.rest.coffee.cashier.model.OrderBean;
 
 
@@ -41,9 +43,14 @@ public class Order {
 			o.setAdditions(additions);
 		}
 		//todo calculate the cost
-		//insert into database
-		//get the id
-		return  "<?xml version=\"1.0\"?>" + "<msg>" + o.getType()+"   "+ o.getAdditions() + "</msg>";
+		int id = 100;
+		try {
+			id = Data.insertOrder(o.getType(),"3" , o.getAdditions());
+		} catch (SQLException e) {
+			//todo sth here
+			e.printStackTrace();
+		}
+		return  "<?xml version=\"1.0\"?>" + "<msg>" + id+ "</msg>";
 	}
 	
 	@GET
