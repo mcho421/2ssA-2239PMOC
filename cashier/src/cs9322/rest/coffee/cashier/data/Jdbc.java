@@ -16,8 +16,11 @@ public class Jdbc {
 					+ "p_status string default 'no', c_status string default 'not prepared')");
 			conn.close();
 	}
-	public static Connection getConn() throws SQLException {
-		conn = DriverManager.getConnection("jdbc:sqlite:asst2.db");
+	public static Connection getConn() throws SQLException, ClassNotFoundException {
+		Class.forName("org.sqlite.JDBC");
+		conn = DriverManager.getConnection("jdbc:sqlite:/Users/lan/Documents/asst2.db");
+		if(conn != null)
+			System.out.println("connnected");
 		return conn;
 	}
 	public static void closeConn() throws SQLException {

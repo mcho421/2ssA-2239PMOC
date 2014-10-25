@@ -4,49 +4,75 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import cs9322.rest.coffee.cashier.model.OrderData;
 
 public class Data {
 
-	public static int insertOrder(String type, String cost, String additions) throws SQLException{
+	public static OrderData getOrder(int id) throws SQLException, ClassNotFoundException {
+		OrderData order = null;
 		Connection conn = Jdbc.getConn();
 		Statement stmt = conn.createStatement();
-		stmt.execute("insert into orders (type, cost, additions) values ('"+type+"','"+cost+"','"+additions+"') ");
-		ResultSet rs = stmt.getGeneratedKeys();
-		rs.next();
-		int id = rs.getInt("id");
+		ResultSet rs = stmt.executeQuery("select * from orders where id = '"+id+"'");
+		if(rs.next()) {
+			order = new OrderData();
+			order.setId(rs.getInt("id"));
+			order.setType(rs.getString("type"));
+			order.setAdditions(rs.getString("additions"));
+			order.setCost(rs.getString("cost"));
+			//order.setPayment_type(rs.getString("payment"));
+			//order.setCard_details(rs.getString("carddetail"));
+			order.setP_status(rs.getString("p_status"));
+			order.setC_status(rs.getString("c_status"));
+		}
 		Jdbc.closeConn();
-		return id;
+		return order;
 	}
-	public static void updateOrder(int id, String type, String additions ) throws SQLException{
+	public static OrderData getPayment(int id) throws SQLException, ClassNotFoundException {
+		OrderData order = null;
 		Connection conn = Jdbc.getConn();
 		Statement stmt = conn.createStatement();
-		stmt.execute("update orders set type='"+type+"', additions='"+additions+"'where id = '"+id+"'");
+		ResultSet rs = stmt.executeQuery("select * from orders where id = '"+id+"'");
+		if(rs.next()) {
+			order = new OrderData();
+			order.setAdditions(null);
+			order.setP_status(rs.getString("p_status"));
+			if(order.getP_status().equals("yes")){
+				order.setPayment_type(rs.getString("payment"));
+				order.setCard_details(rs.getString("carddetail"));
+			}
+		}
 		Jdbc.closeConn();
+		return order;
 	}
-	public static void updatePayment(int id, String payment_type, String card_details ) 
-	throws SQLException{
+	
+	public static List<OrderData> getAllOrders(String key) throws SQLException, ClassNotFoundException {
+		List<OrderData> orders = new ArrayList<OrderData>();
+		OrderData order = null;
 		Connection conn = Jdbc.getConn();
 		Statement stmt = conn.createStatement();
-		stmt.execute("update orders set payment='"+payment_type+"', carddetail='"+card_details+"'where id = '"+id+"'");
+		ResultSet rs = stmt.executeQuery("select * from orders");
+		while(rs.next()) {
+			order = new OrderData();
+			order.setId(rs.getInt("id"));
+			order.setType(rs.getString("type"));
+			order.setAdditions(rs.getString("additions"));
+			order.setCost(rs.getString("cost"));
+			//order.setPayment_type(rs.getString("payment"));
+			//order.setCard_details(rs.getString("carddetail"));
+			order.setP_status(rs.getString("p_status"));
+			order.setC_status(rs.getString("c_status"));
+			if(key.equals("client")) {
+				if(!order.getC_status().equals("released"))
+					orders.add(order);
+			}
+			else
+				orders.add(order);
+		}
 		Jdbc.closeConn();
-	}
-	public static void deleteOrder(int id) throws SQLException{
-		Connection conn = Jdbc.getConn();
-		Statement stmt = conn.createStatement();
-		stmt.execute("delete from orders where id = '"+id+"'");
-		Jdbc.closeConn();
-	}
-	public static void preparing(int id)  throws SQLException{
-		Connection conn = Jdbc.getConn();
-		Statement stmt = conn.createStatement();
-		stmt.execute("update orders set c_status = 'preparing' where id = '"+id+"'");
-		Jdbc.closeConn();
-	}
-	public static void prepared(int id)  throws SQLException{
-		Connection conn = Jdbc.getConn();
-		Statement stmt = conn.createStatement();
-		stmt.execute("update orders set c_status = 'prepared' where id = '"+id+"'");
-		Jdbc.closeConn();
+		return orders;
 	}
 	
 	
