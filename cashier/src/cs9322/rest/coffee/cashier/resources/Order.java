@@ -59,6 +59,9 @@ public class Order {
 				return  Response.status(Response.Status.FORBIDDEN.getStatusCode())
 						.entity("order can not be updated now.").build();
 			}
+			else if (type.equals(order.getType()) && additions.equals(order.getAdditions())) {
+				return Response.status(Response.Status.OK.getStatusCode()).entity(order).build();
+			}
 			else {
 				order.setType(type);
 				order.setAdditions(additions);
@@ -99,20 +102,19 @@ public class Order {
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode())
 					.entity("Order Not Found").build();
 		if(key.equals("client")){
-			if(type.equals(order.getType()) && additions.equals(order.getAdditions()))
+			if(order.getP_status().equals("yes")||order.getC_status().equals("prepared")) {
+				return  Response.status(Response.Status.FORBIDDEN.getStatusCode())
+						.entity("order can not be updated now.").build();
+			}
+			else if (type.equals(order.getType()) && additions.equals(order.getAdditions())) {
 				return Response.status(Response.Status.OK.getStatusCode()).entity(order).build();
+			}
 			else {
-				if(order.getP_status().equals("no")||order.getC_status().equals("prepared")) {
-					return  Response.status(Response.Status.FORBIDDEN.getStatusCode())
-							.entity("cant cancel it now").build();
-				}
-				else {
-					order.setType(type);
-					order.setAdditions(additions);
-					order.updateOrder();
-					order = Data.getOrder(oid);
-					return Response.status(Response.Status.CREATED.getStatusCode()).entity(order).build();
-				}
+				order.setType(type);
+				order.setAdditions(additions);
+				order.updateOrder();
+				order = Data.getOrder(oid);
+				return Response.status(Response.Status.CREATED.getStatusCode()).entity(order).build();
 			}
 		}
 		else {
