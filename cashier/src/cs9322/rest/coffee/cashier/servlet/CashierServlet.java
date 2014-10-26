@@ -3,6 +3,7 @@ package cs9322.rest.coffee.cashier.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -24,6 +25,7 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.representation.Form;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 
+import cs9322.rest.coffee.cashier.data.Jdbc;
 import cs9322.rest.coffee.cashier.model.OrderData;
 
 /**
@@ -34,11 +36,12 @@ public class CashierServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
+     * @throws SQLException 
      * @see HttpServlet#HttpServlet()
      */
-    public CashierServlet() {
+    public CashierServlet() throws SQLException {
         super();
-        // TODO Auto-generated constructor stub
+        Jdbc.init_db();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
