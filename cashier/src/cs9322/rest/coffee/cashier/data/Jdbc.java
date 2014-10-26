@@ -18,7 +18,7 @@ public class Jdbc {
 	}
 	public static Connection getConn() throws SQLException, ClassNotFoundException {
 		Class.forName("org.sqlite.JDBC");
-		conn = DriverManager.getConnection("jdbc:sqlite:/Users/lan/Documents/asst2.db");
+		conn = DriverManager.getConnection("jdbc:sqlite:/Users/mathew/Developer/uni/postgrad/soa/ass2/cashier/WebContent/WEB-INF/asst2.db");
 		if(conn != null)
 			System.out.println("connnected");
 		return conn;
