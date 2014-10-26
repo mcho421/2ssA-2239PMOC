@@ -188,7 +188,7 @@ public class Order {
 	@GET
 	@Path("{id}")
 	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON, MediaType.TEXT_HTML})
-	public Response getOrder(@PathParam("id") String id, @Context HttpHeaders headers) throws SQLException, ClassNotFoundException {
+	public OrderData getOrder(@PathParam("id") String id, @Context HttpHeaders headers) throws SQLException, ClassNotFoundException {
 		String key = null;
 		if(headers.getRequestHeader("key")== null)
 			throw new WebApplicationException(Response
@@ -202,9 +202,7 @@ public class Order {
 			if(order != null) {
 				order.setId(null);
 				order.setP_status(null);
-				return Response
-						.status(Response.Status.OK.getStatusCode())
-						.entity(order).build();
+				return order;
 			}
 			else
 				throw new WebApplicationException(Response
@@ -218,21 +216,20 @@ public class Order {
 	}
 	@GET
 	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-	public Response getOrders(@Context HttpHeaders headers) throws SQLException, ClassNotFoundException {
+	public List<OrderData> getOrders(@Context HttpHeaders headers) throws SQLException, ClassNotFoundException {
 		String key = null;
 		if(headers.getRequestHeader("key") == null)
-			return Response
+			throw new WebApplicationException(Response
 					.status(Response.Status.FORBIDDEN.getStatusCode())
-					.entity("Unauthorised").build();
+					.entity("Unauthorised").build());
 		else
 		 key = headers.getRequestHeader("key").get(0);
 		if(key.equals("client") || key.equals("barista")) {
 			if(Data.getAllOrders(key) == null)
-				return Response
-						.status(Response.Status.OK.getStatusCode()).build();
+				throw new WebApplicationException(Response
+						.status(Response.Status.OK.getStatusCode()).build());
 			else
-				return Response
-						.status(Response.Status.OK.getStatusCode()).entity(Data.getAllOrders(key)).build();
+				return Data.getAllOrders(key);
 		}
 		else 
 			throw new WebApplicationException(Response
