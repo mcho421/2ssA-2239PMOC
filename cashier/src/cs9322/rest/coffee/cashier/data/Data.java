@@ -62,12 +62,18 @@ public class Data {
 			order.setAdditions(rs.getString("additions"));
 			order.setCost(rs.getString("cost"));
 			order.setPayment_uri("http://localhost:8080/cs9322.rest.coffee.cashier/rest/payment/"+id);
-			if(key.equals("client")) {
-				if(!order.getC_status().equals("released"))
+			order.setC_status(rs.getString("c_status"));
+			if(key.equals("barista")) {
+				if(!order.getC_status().equals("released")) {
+					order.setC_status(null);
 					orders.add(order);
+				}
+					
 			}
-			else
+			else{
+				order.setC_status(null);
 				orders.add(order);
+			}
 		}
 		Jdbc.closeConn();
 		return orders;
