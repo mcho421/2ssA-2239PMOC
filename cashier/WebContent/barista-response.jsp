@@ -13,6 +13,6 @@ ${head}<p>
 Response Body:
 ${body}
 </textarea><p>
-<a href="CashierServlet">Cashier Home</a>
+<a href="BaristaServlet">Barista Home</a>
 </body>
 </html>

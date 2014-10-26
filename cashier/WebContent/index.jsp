@@ -4,15 +4,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Response</title>
+<title>Coffee Shop</title>
 </head>
 <body>
-<h1>Response</h1>
-${head}<p>
-<textarea rows="15" cols="60">
-Response Body:
-${body}
-</textarea><p>
-<a href="CashierServlet">Cashier Home</a>
+<h1>Coffee Shop</h1><p>
+<a href="CashierServlet">Cashier</a><p>
+<a href="BaristaServlet">Barista</a><p>
+
 </body>
 </html>
