@@ -10,6 +10,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -25,6 +26,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBElement;
 
 import cs9322.rest.coffee.cashier.data.Data;
+import cs9322.rest.coffee.cashier.model.OptionData;
 import cs9322.rest.coffee.cashier.model.OrderData;
 
 
@@ -36,8 +38,9 @@ public class Payment {
 	Request request;
 	
 	@PUT
+	@Path("{id}")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response payOrder(@FormParam("id") String id,
+	public Response payOrder(@PathParam("id") String id,
 			@FormParam("payment_type") String payment_type,
 			@FormParam("card_details") String card_details,
 			@Context HttpHeaders headers) throws SQLException, ClassNotFoundException {
@@ -85,4 +88,34 @@ public class Payment {
 					.entity("Unauthorised").build());
 	}
 	//todo options
+	@OPTIONS
+	@Path("{id}")
+	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+	public OptionData getPaymentOptions(@PathParam("id") String id, @Context HttpHeaders headers) throws SQLException, ClassNotFoundException {
+		OptionData options = new OptionData();
+		String key = headers.getRequestHeader("key").get(0);
+		if(!key.equals("client") && !key.equals("barista"))
+			throw new WebApplicationException(Response
+						.status(Response.Status.FORBIDDEN.getStatusCode())
+						.entity("Unauthorised").build());
+		else {
+			int oid = Integer.parseInt(id);
+			OrderData order = Data.getOrder(oid);
+			if(order == null)
+				throw new WebApplicationException(Response
+				.status(Response.Status.NOT_FOUND.getStatusCode())
+				.entity("Order Not Found").build());
+			if(key.equals("client")) {
+				options.setGet();
+				if(order.getP_status().equals("no"))
+					options.setPut();
+				return options;
+			}
+			else {
+				options.setGet();
+				return options;
+				
+			}
+		}
+	}
 }

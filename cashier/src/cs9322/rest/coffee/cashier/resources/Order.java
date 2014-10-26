@@ -10,6 +10,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -25,6 +26,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBElement;
 
 import cs9322.rest.coffee.cashier.data.Data;
+import cs9322.rest.coffee.cashier.model.OptionData;
 import cs9322.rest.coffee.cashier.model.OrderData;
 
 
@@ -44,7 +46,7 @@ public class Order {
 			@FormParam("c_status") String c_status,
 			@Context HttpHeaders headers) throws SQLException, ClassNotFoundException {
 		String key = headers.getRequestHeader("key").get(0);
-		if(!key.equals("client")||!key.equals("barista"))
+		if(!key.equals("client") && !key.equals("barista"))
 			return Response.status(Response.Status.FORBIDDEN.getStatusCode())
 					.entity("Unauthorised").build();
 		int oid = Integer.parseInt(id);
@@ -59,8 +61,8 @@ public class Order {
 				order.setType(type);
 				order.setAdditions(additions);
 				order.updateOrder();
-					
-				return Response.status(Response.Status.CREATED.getStatusCode()).build();
+				order = Data.getOrder(oid);
+				return Response.status(Response.Status.CREATED.getStatusCode()).entity(order).build();
 			}
 		}
 		else {
@@ -174,5 +176,79 @@ public class Order {
 	}
 	//todo options
 	
+	@OPTIONS
+	@Path("{id}")
+	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+	public OptionData getOrderOptions(@PathParam("id") String id, @Context HttpHeaders headers) throws SQLException, ClassNotFoundException {
+		OptionData options = new OptionData();
+		String key = headers.getRequestHeader("key").get(0);
+		if(!key.equals("client") && !key.equals("barista"))
+			throw new WebApplicationException(Response
+						.status(Response.Status.FORBIDDEN.getStatusCode())
+						.entity("Unauthorised").build());
+		else {
+			int oid = Integer.parseInt(id);
+			OrderData order = Data.getOrder(oid);
+			if(order == null)
+				throw new WebApplicationException(Response
+				.status(Response.Status.NOT_FOUND.getStatusCode())
+				.entity("Order Not Found").build());
+			if(order.getC_status().equals("not prepared") && order.getP_status().equals("no")){
+				if(key.equals("client")) {
+					options.setPost();
+					options.setPut();
+					options.setGet();
+					options.setDelete();
+				}
+				else {
+					options.setGet();
+					options.setPut();
+				}
+				return options;
+			}
+			else if (order.getC_status().equals("not prepared") && order.getP_status().equals("yes")) {
+				if(key.equals("client")) {
+					options.setPost();
+					options.setGet();
+				}
+				else {
+					options.setGet();
+					options.setPut();
+				}
+				return options;
+			}
+			else if(order.getC_status().equals("prepared") && order.getP_status().equals("no")) {
+				if(key.equals("client")) {
+					options.setPost();
+					options.setGet();
+				}
+				else {
+					options.setGet();
+				}
+				return options;			
+			}
+			else if(order.getC_status().equals("prepared") && order.getP_status().equals("yes")) {
+				if(key.equals("client")) {
+					options.setPost();
+					options.setGet();
+				}
+				else {
+					options.setGet();
+					options.setPut();
+				}
+				return options;			
+			}
+			else {
+				if(key.equals("client")) {
+					options.setPost();
+					options.setGet();
+				}
+				else {
+					options.setGet();
+				}
+				return options;	
+			}
+		}
+	}
 	
 }
