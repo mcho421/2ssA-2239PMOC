@@ -98,40 +98,6 @@ public class BaristaServlet extends HttpServlet {
 
 		if (action == null) {
             // do nothing
-		} else if (action.equals("update-order")) {
-            String idParam = request.getParameter("id");
-			try {
-                int idInt = Integer.parseInt(idParam);
-                String typeParam = request.getParameter("type");
-                String additionsParam = request.getParameter("additions");
-                assert(typeParam != null);
-                assert(additionsParam != null);
-
-                Form form = new Form();
-                form.add("id", idInt);
-                form.add("type", typeParam);
-                form.add("additions", additionsParam);
-                // TODO: add .path(id) and xml
-                ClientResponse cresponse = addBaristaKey(service.path("rest").path("order"))
-                		.type(MediaType.APPLICATION_FORM_URLENCODED).put(ClientResponse.class, form);
-                setResponse(request, cresponse);
-                    
-			} catch (NumberFormatException e) {
-                page = "/error.jsp";
-                request.setAttribute("errmsg", "Order id not an integer: " + request.getParameter("id"));
-			}
-		} else if (action.equals("new-order")) {
-            String newType = request.getParameter("type");
-            String newAdditions = request.getParameter("additions");
-            assert(newType != null);
-            assert(newAdditions != null);
-
-            Form form = new Form();
-            form.add("type", newType);
-            form.add("additions", newAdditions);
-            ClientResponse cresponse = addBaristaKey(service.path("rest").path("order"))
-                    .type(MediaType.APPLICATION_FORM_URLENCODED).post(ClientResponse.class, form);
-            setResponse(request, cresponse);
 		} else if (action.equals("prepare-order")) {
             String idParam = request.getParameter("id"); // TODO: check if pos integer
             assert(idParam != null);
@@ -149,33 +115,6 @@ public class BaristaServlet extends HttpServlet {
             form.add("c_status", "released");
             ClientResponse cresponse = addBaristaKey(service.path("rest").path("order").path(idParam))
                     .type(MediaType.APPLICATION_FORM_URLENCODED).put(ClientResponse.class, form);
-            setResponse(request, cresponse);
-		} else if (action.equals("new-payment")) {
-            String idParam = request.getParameter("id");
-			try {
-                int idInt = Integer.parseInt(idParam);
-                String paymentTypeParam = request.getParameter("payment_type");
-                String cardDetailsParam = request.getParameter("card_details");
-                assert(paymentTypeParam != null);
-                assert(cardDetailsParam != null);
-
-                Form form = new Form();
-                form.add("payment_type", paymentTypeParam);
-                form.add("card_details", cardDetailsParam);
-                ClientResponse cresponse = addBaristaKey(service.path("rest").path("payment").path(idParam))
-                		.type(MediaType.APPLICATION_FORM_URLENCODED).put(ClientResponse.class, form);
-                setResponse(request, cresponse);
-                    
-			} catch (NumberFormatException e) {
-                page = "/error.jsp";
-                request.setAttribute("errmsg", "Order id not an integer: " + request.getParameter("id"));
-			}
-		} else if (action.equals("options-order")) {
-            String idParam = request.getParameter("id"); // TODO: check if pos integer
-            assert(idParam != null);
-
-            ClientResponse cresponse = addBaristaKey(service.path("rest").path("order").path(idParam))
-                    .options(ClientResponse.class);
             setResponse(request, cresponse);
 		}
 
