@@ -56,7 +56,7 @@ public class Order {
 					.entity("Order Not Found").build();
 		if(key.equals("client")){
 			if(type.equals(order.getType()) && additions.equals(order.getAdditions()))
-				return Response.status(Response.Status.OK.getStatusCode()).build();
+				return Response.status(Response.Status.OK.getStatusCode()).entity(order).build();
 			else {
 				order.setType(type);
 				order.setAdditions(additions);
@@ -74,7 +74,7 @@ public class Order {
 			else {
 					order.setC_status(c_status);
 					order.updateCoffee();
-					return Response.status(Response.Status.CREATED.getStatusCode()).build();
+					return Response.status(Response.Status.CREATED.getStatusCode()).entity(order).build();
 				}
 		}
 	}
@@ -98,7 +98,7 @@ public class Order {
 					.entity("Order Not Found").build();
 		if(key.equals("client")){
 			if(type.equals(order.getType()) && additions.equals(order.getAdditions()))
-				return Response.status(Response.Status.OK.getStatusCode()).build();
+				return Response.status(Response.Status.OK.getStatusCode()).entity(order).build();
 			else {
 				order.setType(type);
 				order.setAdditions(additions);
@@ -116,7 +116,7 @@ public class Order {
 			else {
 					order.setC_status(c_status);
 					order.updateCoffee();
-					return Response.status(Response.Status.CREATED.getStatusCode()).build();
+					return Response.status(Response.Status.CREATED.getStatusCode()).entity(order).build();
 				}
 		}
 	}
