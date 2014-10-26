@@ -62,6 +62,7 @@ public class Data {
 			order.setAdditions(rs.getString("additions"));
 			order.setCost(rs.getString("cost"));
 			order.setPayment_uri("http://localhost:8080/cs9322.rest.coffee.cashier/rest/payment/"+id);
+			order.setP_status(rs.getString("p_status"));
 			order.setC_status(rs.getString("c_status"));
 			if(key.equals("barista")) {
 				if(!order.getC_status().equals("released")) {

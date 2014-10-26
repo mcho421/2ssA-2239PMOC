@@ -45,7 +45,7 @@ public class Payment {
 			@FormParam("card_details") String card_details,
 			@Context HttpHeaders headers) throws SQLException, ClassNotFoundException {
 		String key = null;
-		if(headers.getRequestHeader("key").get(0) == null)
+		if(headers.getRequestHeader("key") == null)
 			throw new WebApplicationException(Response
 					.status(Response.Status.FORBIDDEN.getStatusCode())
 					.entity("Unauthorised").build());
@@ -76,28 +76,28 @@ public class Payment {
 	
 	@GET
 	@Path("{id}")
-	public OrderData getPayment(@PathParam("id") String id, @Context HttpHeaders headers) throws SQLException, ClassNotFoundException {
+	public Response getPayment(@PathParam("id") String id, @Context HttpHeaders headers) throws SQLException, ClassNotFoundException {
 		String key = null;
-		if(headers.getRequestHeader("key").get(0) == null)
-			throw new WebApplicationException(Response
-					.status(Response.Status.FORBIDDEN.getStatusCode())
-					.entity("Unauthorised").build());
+		if(headers.getRequestHeader("key") == null)
+			return Response.status(Response.Status.FORBIDDEN.getStatusCode())
+					.entity("Unauthorised").build();
 		else
 		 key = headers.getRequestHeader("key").get(0);
 		if(key.equals("client") || key.equals("barista")) {
 			int oid = Integer.parseInt(id);
 			OrderData order = Data.getPayment(oid);
 			if(order != null)
-				return order;
+				return Response.status(Response.Status.OK.getStatusCode())
+						.entity(order).build();
 			else
-				throw new WebApplicationException(Response
+				return Response
 						.status(Response.Status.NOT_FOUND.getStatusCode())
-						.entity("Order Not Found").build());
+						.entity("Order Not Found").build();
 		}
 		else
-			throw new WebApplicationException(Response
+			return Response
 					.status(Response.Status.FORBIDDEN.getStatusCode())
-					.entity("Unauthorised").build());
+					.entity("Unauthorised").build();
 	}
 	//todo options
 	@OPTIONS
@@ -106,7 +106,7 @@ public class Payment {
 	public OptionData getPaymentOptions(@PathParam("id") String id, @Context HttpHeaders headers) throws SQLException, ClassNotFoundException {
 		OptionData options = new OptionData();
 		String key = null;
-		if(headers.getRequestHeader("key").get(0) == null)
+		if(headers.getRequestHeader("key") == null)
 			throw new WebApplicationException(Response
 					.status(Response.Status.FORBIDDEN.getStatusCode())
 					.entity("Unauthorised").build());
