@@ -65,13 +65,11 @@ public class Data {
 			order.setC_status(rs.getString("c_status"));
 			if(key.equals("barista")) {
 				if(!order.getC_status().equals("released")) {
-					order.setC_status(null);
 					orders.add(order);
 				}
 					
 			}
 			else{
-				order.setC_status(null);
 				orders.add(order);
 			}
 		}

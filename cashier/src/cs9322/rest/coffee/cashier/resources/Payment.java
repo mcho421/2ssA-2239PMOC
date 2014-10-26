@@ -44,7 +44,13 @@ public class Payment {
 			@FormParam("payment_type") String payment_type,
 			@FormParam("card_details") String card_details,
 			@Context HttpHeaders headers) throws SQLException, ClassNotFoundException {
-		String key = headers.getRequestHeader("key").get(0);
+		String key = null;
+		if(headers.getRequestHeader("key").get(0) == null)
+			throw new WebApplicationException(Response
+					.status(Response.Status.FORBIDDEN.getStatusCode())
+					.entity("Unauthorised").build());
+		else
+		 key = headers.getRequestHeader("key").get(0);
 		if(!key.equals("client"))
 			return Response.status(Response.Status.FORBIDDEN.getStatusCode())
 					.entity("Unauthorised").build();
@@ -71,7 +77,13 @@ public class Payment {
 	@GET
 	@Path("{id}")
 	public OrderData getPayment(@PathParam("id") String id, @Context HttpHeaders headers) throws SQLException, ClassNotFoundException {
-		String key = headers.getRequestHeader("key").get(0);
+		String key = null;
+		if(headers.getRequestHeader("key").get(0) == null)
+			throw new WebApplicationException(Response
+					.status(Response.Status.FORBIDDEN.getStatusCode())
+					.entity("Unauthorised").build());
+		else
+		 key = headers.getRequestHeader("key").get(0);
 		if(key.equals("client") || key.equals("barista")) {
 			int oid = Integer.parseInt(id);
 			OrderData order = Data.getPayment(oid);
@@ -93,7 +105,13 @@ public class Payment {
 	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 	public OptionData getPaymentOptions(@PathParam("id") String id, @Context HttpHeaders headers) throws SQLException, ClassNotFoundException {
 		OptionData options = new OptionData();
-		String key = headers.getRequestHeader("key").get(0);
+		String key = null;
+		if(headers.getRequestHeader("key").get(0) == null)
+			throw new WebApplicationException(Response
+					.status(Response.Status.FORBIDDEN.getStatusCode())
+					.entity("Unauthorised").build());
+		else
+		 key = headers.getRequestHeader("key").get(0);
 		if(!key.equals("client") && !key.equals("barista"))
 			throw new WebApplicationException(Response
 						.status(Response.Status.FORBIDDEN.getStatusCode())

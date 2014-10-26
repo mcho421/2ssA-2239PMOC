@@ -45,7 +45,13 @@ public class Order {
 			@FormParam("additions") String additions,
 			@FormParam("c_status") String c_status,
 			@Context HttpHeaders headers) throws SQLException, ClassNotFoundException {
-		String key = headers.getRequestHeader("key").get(0);
+		String key = null;
+		if(headers.getRequestHeader("key").get(0) == null)
+			throw new WebApplicationException(Response
+					.status(Response.Status.FORBIDDEN.getStatusCode())
+					.entity("Unauthorised").build());
+		else
+		 key = headers.getRequestHeader("key").get(0);
 		if(!key.equals("client") && !key.equals("barista"))
 			return Response.status(Response.Status.FORBIDDEN.getStatusCode())
 					.entity("Unauthorised").build();
@@ -92,7 +98,13 @@ public class Order {
 			@FormParam("additions") String additions,
 			@FormParam("c_status") String c_status,
 			@Context HttpHeaders headers) throws SQLException, ClassNotFoundException {
-		String key = headers.getRequestHeader("key").get(0);
+		String key = null;
+		if(headers.getRequestHeader("key").get(0) == null)
+			throw new WebApplicationException(Response
+					.status(Response.Status.FORBIDDEN.getStatusCode())
+					.entity("Unauthorised").build());
+		else
+		 key = headers.getRequestHeader("key").get(0);
 		if(!key.equals("client") && !key.equals("barista"))
 			return Response.status(Response.Status.FORBIDDEN.getStatusCode())
 					.entity("Unauthorised").build();
@@ -138,7 +150,13 @@ public class Order {
 			@FormParam("additions") String additions,
 			@Context HttpHeaders headers
 	) throws IOException, SQLException, ClassNotFoundException {
-		String key = headers.getRequestHeader("key").get(0);
+		String key = null;
+		if(headers.getRequestHeader("key").get(0) == null)
+			throw new WebApplicationException(Response
+					.status(Response.Status.FORBIDDEN.getStatusCode())
+					.entity("Unauthorised").build());
+		else
+		 key = headers.getRequestHeader("key").get(0);
 		if(key.equals("client")) {
 			OrderData o = new OrderData();
 			o.setType(type);
@@ -171,7 +189,13 @@ public class Order {
 	@Path("{id}")
 	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 	public OrderData getOrder(@PathParam("id") String id, @Context HttpHeaders headers) throws SQLException, ClassNotFoundException {
-		String key = headers.getRequestHeader("key").get(0);
+		String key = null;
+		if(headers.getRequestHeader("key").get(0) == null)
+			throw new WebApplicationException(Response
+					.status(Response.Status.FORBIDDEN.getStatusCode())
+					.entity("Unauthorised").build());
+		else
+		 key = headers.getRequestHeader("key").get(0);
 		if(key.equals("client") || key.equals("barista")) {
 			int oid = Integer.parseInt(id);
 			OrderData order = Data.getOrder(oid);
@@ -193,7 +217,13 @@ public class Order {
 	@GET
 	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 	public List<OrderData> getOrders(@Context HttpHeaders headers) throws SQLException, ClassNotFoundException {
-		String key = headers.getRequestHeader("key").get(0);
+		String key = null;
+		if(headers.getRequestHeader("key").get(0) == null)
+			throw new WebApplicationException(Response
+					.status(Response.Status.FORBIDDEN.getStatusCode())
+					.entity("Unauthorised").build());
+		else
+		 key = headers.getRequestHeader("key").get(0);
 		if(key.equals("client") || key.equals("barista")) {
 			if(Data.getAllOrders(key) == null)
 				throw new WebApplicationException(Response
@@ -210,7 +240,13 @@ public class Order {
 	@DELETE
 	@Path("{id}")
 	public Response deleteOrder(@PathParam("id") String id, @Context HttpHeaders headers) throws SQLException, ClassNotFoundException {
-		String key = headers.getRequestHeader("key").get(0);
+		String key = null;
+		if(headers.getRequestHeader("key").get(0) == null)
+			throw new WebApplicationException(Response
+					.status(Response.Status.FORBIDDEN.getStatusCode())
+					.entity("Unauthorised").build());
+		else
+		 key = headers.getRequestHeader("key").get(0);
 		if(!key.equals("client"))
 			return Response.status(Response.Status.FORBIDDEN.getStatusCode())
 					.entity("Unauthorised").build();
@@ -236,7 +272,13 @@ public class Order {
 	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 	public OptionData getOrderOptions(@PathParam("id") String id, @Context HttpHeaders headers) throws SQLException, ClassNotFoundException {
 		OptionData options = new OptionData();
-		String key = headers.getRequestHeader("key").get(0);
+		String key = null;
+		if(headers.getRequestHeader("key").get(0) == null)
+			throw new WebApplicationException(Response
+					.status(Response.Status.FORBIDDEN.getStatusCode())
+					.entity("Unauthorised").build());
+		else
+		 key = headers.getRequestHeader("key").get(0);
 		if(!key.equals("client") && !key.equals("barista"))
 			throw new WebApplicationException(Response
 						.status(Response.Status.FORBIDDEN.getStatusCode())
