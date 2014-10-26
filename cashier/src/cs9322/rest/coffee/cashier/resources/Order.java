@@ -78,6 +78,48 @@ public class Order {
 				}
 		}
 	}
+	@PUT
+	@Path("{id}")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public Response updateOrders(
+			@PathParam("id") String id,
+			@FormParam("type") String type,
+			@FormParam("additions") String additions,
+			@FormParam("c_status") String c_status,
+			@Context HttpHeaders headers) throws SQLException, ClassNotFoundException {
+		String key = headers.getRequestHeader("key").get(0);
+		if(!key.equals("client") && !key.equals("barista"))
+			return Response.status(Response.Status.FORBIDDEN.getStatusCode())
+					.entity("Unauthorised").build();
+		int oid = Integer.parseInt(id);
+		OrderData order = Data.getOrder(oid);
+		if(order == null) 
+			return Response.status(Response.Status.NOT_FOUND.getStatusCode())
+					.entity("Order Not Found").build();
+		if(key.equals("client")){
+			if(type.equals(order.getType()) && additions.equals(order.getAdditions()))
+				return Response.status(Response.Status.OK.getStatusCode()).build();
+			else {
+				order.setType(type);
+				order.setAdditions(additions);
+				order.updateOrder();
+				order = Data.getOrder(oid);
+				return Response.status(Response.Status.CREATED.getStatusCode()).entity(order).build();
+			}
+		}
+		else {
+			if(c_status.equals(order.getC_status()))
+				return Response.status(Response.Status.OK.getStatusCode()).build();
+			else if (c_status.equals("released") && order.getP_status().equals("no"))
+				return  Response.status(Response.Status.FORBIDDEN.getStatusCode())
+						.entity("This order has not been paid yet").build();
+			else {
+					order.setC_status(c_status);
+					order.updateCoffee();
+					return Response.status(Response.Status.CREATED.getStatusCode()).build();
+				}
+		}
+	}
 	@POST
 	@Produces(MediaType.TEXT_XML)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -123,8 +165,11 @@ public class Order {
 		if(key.equals("client") || key.equals("barista")) {
 			int oid = Integer.parseInt(id);
 			OrderData order = Data.getOrder(oid);
-			if(order != null)
+			if(order != null) {
+				order.setId(null);
+				order.setP_status(null);
 				return order;
+			}
 			else
 				throw new WebApplicationException(Response
 						.status(Response.Status.NOT_FOUND.getStatusCode())

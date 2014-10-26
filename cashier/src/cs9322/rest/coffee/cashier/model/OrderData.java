@@ -4,19 +4,31 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import cs9322.rest.coffee.cashier.data.Jdbc;
 @XmlRootElement
 public class OrderData {
-	int id;
+
+	
+	String id;
 	String type;
 	String cost;
 	String additions = "";
+	String payment_uri;
 	String payment_type;
 	String card_details;
 	String p_status;
 	String c_status;
+	
+	public String getPayment_uri() {
+		return payment_uri;
+	}
+	public void setPayment_uri(String payment_uri) {
+		this.payment_uri = payment_uri;
+	}
 	public int insertOrder() throws SQLException, ClassNotFoundException{
 		Connection conn = Jdbc.getConn();
 		Statement stmt = conn.createStatement();
@@ -30,12 +42,14 @@ public class OrderData {
 	}
 	public void updateOrder() throws SQLException, ClassNotFoundException{
 		Connection conn = Jdbc.getConn();
+		int id = Integer.parseInt(this.id);
 		Statement stmt = conn.createStatement();
 		stmt.execute("update orders set type='"+type+"', additions='"+additions+"'where id = '"+id+"'");
 		Jdbc.closeConn();
 	}
 	public void updateCoffee() throws SQLException, ClassNotFoundException{
 		Connection conn = Jdbc.getConn();
+		int id = Integer.parseInt(this.id);
 		Statement stmt = conn.createStatement();
 		stmt.execute("update orders set c_status='"+c_status+"'where id = '"+id+"'");
 		Jdbc.closeConn();
@@ -44,19 +58,21 @@ public class OrderData {
 	throws SQLException, ClassNotFoundException{
 		Connection conn = Jdbc.getConn();
 		Statement stmt = conn.createStatement();
+		int id = Integer.parseInt(this.id);
 		stmt.execute("update orders set payment='"+payment_type+"', carddetail='"+card_details+"', p_status = '"+p_status+"'where id = '"+id+"'");
 		Jdbc.closeConn();
 	}
 	public void deleteOrder() throws SQLException, ClassNotFoundException{
 		Connection conn = Jdbc.getConn();
+		int id = Integer.parseInt(this.id);
 		Statement stmt = conn.createStatement();
 		stmt.execute("delete from orders where id = '"+id+"'");
 		Jdbc.closeConn();
 	}
-	public int getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getType() {

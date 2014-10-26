@@ -18,12 +18,11 @@ public class Data {
 		ResultSet rs = stmt.executeQuery("select * from orders where id = '"+id+"'");
 		if(rs.next()) {
 			order = new OrderData();
-			order.setId(rs.getInt("id"));
+			order.setId(Integer.toString(rs.getInt("id")));
 			order.setType(rs.getString("type"));
 			order.setAdditions(rs.getString("additions"));
 			order.setCost(rs.getString("cost"));
-			//order.setPayment_type(rs.getString("payment"));
-			//order.setCard_details(rs.getString("carddetail"));
+			order.setPayment_uri("http://localhost:8080/cs9322.rest.coffee.cashier/rest/payment/"+id);
 			order.setP_status(rs.getString("p_status"));
 			order.setC_status(rs.getString("c_status"));
 		}
@@ -38,6 +37,7 @@ public class Data {
 		if(rs.next()) {
 			order = new OrderData();
 			order.setAdditions(null);
+			order.setId(null);
 			order.setP_status(rs.getString("p_status"));
 			if(order.getP_status().equals("yes")){
 				order.setPayment_type(rs.getString("payment"));
@@ -56,14 +56,12 @@ public class Data {
 		ResultSet rs = stmt.executeQuery("select * from orders");
 		while(rs.next()) {
 			order = new OrderData();
-			order.setId(rs.getInt("id"));
+			String id = Integer.toString(rs.getInt("id"));
+			order.setId(id);
 			order.setType(rs.getString("type"));
 			order.setAdditions(rs.getString("additions"));
 			order.setCost(rs.getString("cost"));
-			//order.setPayment_type(rs.getString("payment"));
-			//order.setCard_details(rs.getString("carddetail"));
-			order.setP_status(rs.getString("p_status"));
-			order.setC_status(rs.getString("c_status"));
+			order.setPayment_uri("http://localhost:8080/cs9322.rest.coffee.cashier/rest/payment/"+id);
 			if(key.equals("client")) {
 				if(!order.getC_status().equals("released"))
 					orders.add(order);
