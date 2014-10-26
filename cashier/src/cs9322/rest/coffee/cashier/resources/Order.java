@@ -55,8 +55,10 @@ public class Order {
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode())
 					.entity("Order Not Found").build();
 		if(key.equals("client")){
-			if(type.equals(order.getType()) && additions.equals(order.getAdditions()))
-				return Response.status(Response.Status.OK.getStatusCode()).entity(order).build();
+			if(order.getP_status().equals("no")||order.getC_status().equals("prepared")) {
+				return  Response.status(Response.Status.FORBIDDEN.getStatusCode())
+						.entity("cant cancel it now").build();
+			}
 			else {
 				order.setType(type);
 				order.setAdditions(additions);
@@ -100,11 +102,17 @@ public class Order {
 			if(type.equals(order.getType()) && additions.equals(order.getAdditions()))
 				return Response.status(Response.Status.OK.getStatusCode()).entity(order).build();
 			else {
-				order.setType(type);
-				order.setAdditions(additions);
-				order.updateOrder();
-				order = Data.getOrder(oid);
-				return Response.status(Response.Status.CREATED.getStatusCode()).entity(order).build();
+				if(order.getP_status().equals("no")||order.getC_status().equals("prepared")) {
+					return  Response.status(Response.Status.FORBIDDEN.getStatusCode())
+							.entity("cant cancel it now").build();
+				}
+				else {
+					order.setType(type);
+					order.setAdditions(additions);
+					order.updateOrder();
+					order = Data.getOrder(oid);
+					return Response.status(Response.Status.CREATED.getStatusCode()).entity(order).build();
+				}
 			}
 		}
 		else {
@@ -210,7 +218,7 @@ public class Order {
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode())
 					.entity("Order Not Found").build();
 		else {
-			if(order.getC_status().equals("not prepared") || order.getP_status().equals("yes")) {
+			if(order.getC_status().equals("prepared") || order.getP_status().equals("no")) {
 				order.deleteOrder();
 				return Response.status(Response.Status.OK.getStatusCode()).build();
 			}
@@ -240,7 +248,6 @@ public class Order {
 				.entity("Order Not Found").build());
 			if(order.getC_status().equals("not prepared") && order.getP_status().equals("no")){
 				if(key.equals("client")) {
-					options.setPost();
 					options.setPut();
 					options.setGet();
 					options.setDelete();
@@ -253,7 +260,6 @@ public class Order {
 			}
 			else if (order.getC_status().equals("not prepared") && order.getP_status().equals("yes")) {
 				if(key.equals("client")) {
-					options.setPost();
 					options.setGet();
 				}
 				else {
@@ -264,7 +270,6 @@ public class Order {
 			}
 			else if(order.getC_status().equals("prepared") && order.getP_status().equals("no")) {
 				if(key.equals("client")) {
-					options.setPost();
 					options.setGet();
 				}
 				else {
@@ -274,7 +279,6 @@ public class Order {
 			}
 			else if(order.getC_status().equals("prepared") && order.getP_status().equals("yes")) {
 				if(key.equals("client")) {
-					options.setPost();
 					options.setGet();
 				}
 				else {
@@ -285,7 +289,6 @@ public class Order {
 			}
 			else {
 				if(key.equals("client")) {
-					options.setPost();
 					options.setGet();
 				}
 				else {
