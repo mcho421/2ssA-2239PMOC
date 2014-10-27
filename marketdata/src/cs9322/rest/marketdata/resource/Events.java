@@ -22,7 +22,7 @@ import cs9322.rest.marketdata.model.Data;
 @Path("/{eventSetId}")
 public class Events {
 	
-	static String url_pattern = "/Users/lan/Desktop/";
+	static String url_pattern = "/Users/mathew/Desktop/";
 
 	@PUT
 	public Response createEvent(
@@ -41,10 +41,7 @@ public class Events {
 			return Response.status(Response.Status.CREATED.getStatusCode()).build();
 		}
 	}
-	@GET
-	@Path("/xml")
-	@Produces(MediaType.APPLICATION_XML)
-	public List<Data> getEvent (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException {
+	public List<Data> getEvent(String eventSetId) throws SQLException, FileNotFoundException {
 		System.out.println(eventSetId);
 		EventData ed = DataOperation.getEvent(eventSetId);
 		if(ed == null)
@@ -54,6 +51,20 @@ public class Events {
 			List<Data> result = Jsefa.deserialize_xml(xml_url);
 			return result;
 		}
+	}
+
+	@GET
+	@Path("/xml")
+	@Produces(MediaType.APPLICATION_XML)
+	public List<Data> getEventXml (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException {
+		return getEvent(eventSetId);
+	}
+
+	@GET
+	@Path("/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Data> getEventJson (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException {
+		return getEvent(eventSetId);
 	}
 	@GET
 	@Path("/trade/xml")
