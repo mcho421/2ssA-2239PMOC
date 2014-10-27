@@ -2,6 +2,7 @@ package cs9322.rest.marketdata.data;
 
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.PrintWriter;
@@ -27,15 +28,19 @@ public class Jsefa {
 
 	public static String convert_csv(String url) throws SQLException, FileNotFoundException, UnsupportedEncodingException {
         CsvConfiguration config = new CsvConfiguration();
+        File f = new File(url);
+        String fileName = f.getName();
+        fileName = fileName.replaceFirst("[.][^.]+$", "")+".xml";
+        String new_location = System.getProperty("catalina.home")+"/xml/"+fileName;
         config.setLineFilter(new HeaderAndFooterFilter(1, false, true));
         config.setFieldDelimiter(',');
 		Deserializer deserializer = CsvIOFactory.createFactory(config,Data.class).createDeserializer();
 		XmlSerializer serializer = XmlIOFactory.createFactory(Data.class).createSerializer();
 		Reader reader = new BufferedReader(new FileReader(url));
-		Writer writer = new PrintWriter("/Users/lan/Desktop/0.xml", "UTF-8");
+		Writer writer = new PrintWriter(new_location, "UTF-8");
 		serializer.open(writer);
 		serializer.getLowLevelSerializer().writeXmlDeclaration("1.0", "ISO-8859-1");
-		serializer.getLowLevelSerializer().writeStartElement(QName.create("MarketDatas"));
+		serializer.getLowLevelSerializer().writeStartElement(QName.create("MarketData"));
 		deserializer.open(reader);
 		while (deserializer.hasNext()) {
 		    Data m = deserializer.next();
@@ -46,7 +51,7 @@ public class Jsefa {
 		serializer.close(true);
 		deserializer.close(true);	
 		
-		return "";
+		return new_location;
 	}
 	public static List<Data> deserialize_xml(String url) throws FileNotFoundException {
 		List<Data> result =  new ArrayList<Data>();

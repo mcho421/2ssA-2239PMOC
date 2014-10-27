@@ -22,7 +22,7 @@ import cs9322.rest.marketdata.model.Data;
 @Path("/{eventSetId}")
 public class Events {
 	
-	static String url_pattern = "";
+	static String url_pattern = "/Users/lan/Desktop/";
 
 	@PUT
 	public Response createEvent(
@@ -31,7 +31,7 @@ public class Events {
 		if(ed != null)
 			return Response.status(Response.Status.OK.getStatusCode()).build();
 		else {
-			String csv_url = url_pattern+ eventSetId;
+			String csv_url = url_pattern+ eventSetId +".csv";
 			String xml_url = Jsefa.convert_csv(csv_url);
 			EventData event = new EventData();
 			event.setEventSetId(eventSetId);
