@@ -44,11 +44,21 @@ public class CurrencyConvertServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		evenSetId = request.getParameter("EventSetId");
 		targetCurrency = request.getParameter("TargetCurrency");
+    	String submitted = request.getParameter("submitted");
 		
-		try {
+    	if (submitted != null) {
+    		CurrencyConvertService();
+    	}
+		request.setAttribute("message", message);
+    	request.setAttribute("wsdl", Constants.instance.getCurrencyConvertUrl());
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/currencyconvertservice.jsp");
+		dispatcher.forward(request, response);
+	}
+
+    private void CurrencyConvertService() {
+    	try {
 			// Create SOAP Connection
 			SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
 			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
@@ -82,15 +92,8 @@ public class CurrencyConvertServlet extends HttpServlet {
 			System.err.println("Error occurred while sending SOAP Request to Server");
 			e.printStackTrace();
 		}
-		request.setAttribute("message", message);
-    	request.setAttribute("wsdl", Constants.instance.getCurrencyConvertUrl());
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/currencyconvertservice.jsp");
-		dispatcher.forward(request, response);
-	}
+    }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	private static SOAPMessage createSOAPRequest() throws Exception {
 		MessageFactory messageFactory = MessageFactory.newInstance();
 		SOAPMessage soapMessage = messageFactory.createMessage();
@@ -127,8 +130,9 @@ public class CurrencyConvertServlet extends HttpServlet {
 
 		return soapMessage;
 	}
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }

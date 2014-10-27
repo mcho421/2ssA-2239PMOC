@@ -20,6 +20,7 @@ ${wsdl}
 
 <h2>Demo</h2>
 <form action="SummaryServlet">
+<input type="hidden" name="submitted" value ="true">
 <table>
 <tr>
 <td>EventSetId :</td><td> <input type = "text" name="EventSetId" > </td>

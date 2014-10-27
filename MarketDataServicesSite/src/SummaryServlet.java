@@ -49,10 +49,27 @@ public class SummaryServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		eventSetId = request.getParameter("EventSetId");
-		
-		try {
+    	String submitted = request.getParameter("submitted");
+
+    	if (submitted != null) {
+    		SummaryService();
+    	}
+		request.setAttribute("newEventSetId", newEventSetId);
+		request.setAttribute("sec", sec);
+		request.setAttribute("startDate", startDate);
+		request.setAttribute("endDate", endDate);
+		request.setAttribute("marketType", marketType);
+		request.setAttribute("currencyCode", currencyCode);
+		request.setAttribute("fileSize", fileSize);
+		request.setAttribute("message", message);
+    	request.setAttribute("wsdl", Constants.instance.getSummaryUrl());
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/summarymarketdataservice.jsp");
+		dispatcher.forward(request, response);
+	}
+
+    private void SummaryService() {
+    	try {
 			// Create SOAP Connection
 			SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
 			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
@@ -95,22 +112,8 @@ public class SummaryServlet extends HttpServlet {
 			System.err.println("Error occurred while sending SOAP Request to Server");
 			e.printStackTrace();
 		}
-		request.setAttribute("newEventSetId", newEventSetId);
-		request.setAttribute("sec", sec);
-		request.setAttribute("startDate", startDate);
-		request.setAttribute("endDate", endDate);
-		request.setAttribute("marketType", marketType);
-		request.setAttribute("currencyCode", currencyCode);
-		request.setAttribute("fileSize", fileSize);
-		request.setAttribute("message", message);
-    	request.setAttribute("wsdl", Constants.instance.getSummaryUrl());
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/summarymarketdataservice.jsp");
-		dispatcher.forward(request, response);
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+    }
+    
 	private static SOAPMessage createSOAPRequest() throws Exception {
 		MessageFactory messageFactory = MessageFactory.newInstance();
 		SOAPMessage soapMessage = messageFactory.createMessage();
@@ -145,8 +148,9 @@ public class SummaryServlet extends HttpServlet {
 
 		return soapMessage;
 	}
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }

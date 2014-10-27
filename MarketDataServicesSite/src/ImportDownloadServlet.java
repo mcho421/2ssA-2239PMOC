@@ -44,7 +44,6 @@ public class ImportDownloadServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
     	eventSetId = request.getParameter("eventSetId");
     	sec = request.getParameter("sec");
     	startDate = request.getParameter("startDate");
@@ -69,9 +68,6 @@ public class ImportDownloadServlet extends HttpServlet {
 		dispatcher.forward(request, response);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
     private void ImportService() {
     	try {
 			// Create SOAP Connection
@@ -236,5 +232,8 @@ public class ImportDownloadServlet extends HttpServlet {
 
 		return soapMessage;
 	}
-
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
 }

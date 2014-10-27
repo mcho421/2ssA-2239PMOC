@@ -12,7 +12,7 @@ public enum Constants {
 	private Constants() {
         String isGrieg = System.getenv("grieg");
         if (isGrieg != null) {
-        	System.out.println("'grieg' environment variable set. Using production settings");
+        	System.out.println("'grieg' environment variable set. Using proxy settings");
         	System.setProperty("http.proxyHost", "tlan184.srvr.cse.edu.au");
     		System.setProperty("http.proxyPort", "80");
     		// Note, change url to "CurrencyConvertService" in tlan184
@@ -20,7 +20,7 @@ public enum Constants {
         	serviceBase = "http://vcas720.srvr.cse.unsw.edu.au/axis2/services";
 
         } else {
-        	System.out.println("'grieg' environment variable NOT set. Using development settings");
+        	System.out.println("'grieg' environment variable NOT set. Not using proxy settings");
 //        	serviceBase = "http://localhost:8080/axis2/services";
         	serviceBase = "http://vcas720.srvr.cse.unsw.edu.au/axis2/services";
 		}
