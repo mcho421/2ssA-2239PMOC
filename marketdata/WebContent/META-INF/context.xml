@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context>  
-  <Resource name="jdbc/asst2" 
+  <Resource name="jdbc/asst2marketdata" 
             auth="Container" 
             type="javax.sql.DataSource" 
             driverClassName="org.sqlite.JDBC"
-            url="jdbc:sqlite:/${catalina.home}/dbs/asst2.db"
+            url="jdbc:sqlite:/${catalina.home}/dbs/asst2marketdata.db"
             factory="org.apache.tomcat.dbcp.dbcp.BasicDataSourceFactory">
   </Resource>
 </Context>

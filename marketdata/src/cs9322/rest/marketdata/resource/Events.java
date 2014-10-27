@@ -13,9 +13,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.transform.TransformerException;
 
 import cs9322.rest.marketdata.data.DataOperation;
+import cs9322.rest.marketdata.data.FilterXml;
 import cs9322.rest.marketdata.data.Jsefa;
+import cs9322.rest.marketdata.init.Constants;
 import cs9322.rest.marketdata.model.EventData;
 import cs9322.rest.marketdata.model.Data;
 
@@ -23,6 +26,7 @@ import cs9322.rest.marketdata.model.Data;
 public class Events {
 	
 	static String url_pattern = "/Users/mathew/Desktop/";
+	private static int counter = 1;
 
 	@PUT
 	public Response createEvent(
@@ -66,74 +70,75 @@ public class Events {
 	public List<Data> getEventJson (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException {
 		return getEvent(eventSetId);
 	}
+
+	public List<Data> getEventType (String eventSetId, String type) throws SQLException, FileNotFoundException, TransformerException {
+		EventData ed = DataOperation.getEvent(eventSetId);
+		if(ed == null)
+			throw new WebApplicationException( Response.status(Response.Status.NOT_FOUND.getStatusCode()).build());
+		else {
+			String xml_url = ed.getXmlLocation();
+			String new_url = Constants.instance.convertedXmlFolderPath + "/" + getNextTempFileName();
+			assert(new_url != null);
+			FilterXml.filterByType(xml_url, new_url, type);
+			List<Data> result = Jsefa.deserialize_xml(new_url);
+			return result;
+		}
+	}
+
 	@GET
 	@Path("/trade/xml")
 	@Produces(MediaType.APPLICATION_XML)
-	public List<Data> getTradeEventXml (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException {
-		EventData ed = DataOperation.getEvent(eventSetId);
-		if(ed == null)
-			throw new WebApplicationException( Response.status(Response.Status.NOT_FOUND.getStatusCode()).build());
-		else {
-			String xml_url = ed.getXmlLocation();
-			String new_url = xml_url+"to be implemented";
-			List<Data> result = Jsefa.deserialize_xml(new_url);
-			return result;
-		}
+	public List<Data> getTradeEventXml (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException, TransformerException {
+		return getEventType(eventSetId, "Trade");
 	}
+
 	@GET
 	@Path("/trade/json")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Data> getTradeEventJson (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException {
-		EventData ed = DataOperation.getEvent(eventSetId);
-		if(ed == null)
-			throw new WebApplicationException( Response.status(Response.Status.NOT_FOUND.getStatusCode()).build());
-		else {
-			String xml_url = ed.getXmlLocation();
-			String new_url = xml_url+"to be implemented";
-			List<Data> result = Jsefa.deserialize_xml(new_url);
-			return result;
-		}
+	public List<Data> getTradeEventJson (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException, TransformerException {
+		return getEventType(eventSetId, "Trade");
 	}
+
 	@GET
-	@Path("/trade/totalprice")
-	@Produces(MediaType.TEXT_PLAIN)
-	public Response getTotalPrice (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException {
+	@Path("/quote/xml")
+	@Produces(MediaType.APPLICATION_XML)
+	public List<Data> getQuoteEventXml (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException, TransformerException {
+		return getEventType(eventSetId, "Quote");
+	}
+
+	@GET
+	@Path("/quote/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Data> getQuoteEventJson (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException, TransformerException {
+		return getEventType(eventSetId, "Quote");
+	}
+
+	public Response getTotalPrice (String eventSetId, String type) throws SQLException, FileNotFoundException, TransformerException {
 		EventData ed = DataOperation.getEvent(eventSetId);
 		if(ed == null)
 			return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
 		else {
 			String xml_url = ed.getXmlLocation();
-			String total_price = xml_url+"to be implemented";
-			//List<Data> result = Jsefa.deserialize_xml(new_url);
+			String total_price = FilterXml.totalPrice(xml_url, type);
 			return Response.status(Response.Status.OK.getStatusCode()).entity(total_price).build();
 		}
 	}
+
 	@GET
-	@Path("/quote/xml")
-	@Produces(MediaType.APPLICATION_XML)
-	public List<Data> getQuoteEventXml (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException {
-		EventData ed = DataOperation.getEvent(eventSetId);
-		if(ed == null)
-			throw new WebApplicationException( Response.status(Response.Status.NOT_FOUND.getStatusCode()).build());
-		else {
-			String xml_url = ed.getXmlLocation();
-			String new_url = xml_url+"to be implemented";
-			List<Data> result = Jsefa.deserialize_xml(new_url);
-			return result;
-		}
+	@Path("/quote/totalprice")
+	@Produces(MediaType.TEXT_PLAIN)
+	public Response getTotalPriceQuote (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException, TransformerException {
+		return getTotalPrice(eventSetId, "Quote");
 	}
+
 	@GET
-	@Path("/quote/json")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Data> getQuoteEventJson (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException {
-		EventData ed = DataOperation.getEvent(eventSetId);
-		if(ed == null)
-			throw new WebApplicationException( Response.status(Response.Status.NOT_FOUND.getStatusCode()).build());
-		else {
-			String xml_url = ed.getXmlLocation();
-			String new_url = xml_url+"to be implemented";
-			List<Data> result = Jsefa.deserialize_xml(new_url);
-			return result;
-		}
+	@Path("/trade/totalprice")
+	@Produces(MediaType.TEXT_PLAIN)
+	public Response getTotalPriceTrade (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException, TransformerException {
+		return getTotalPrice(eventSetId, "Trade");
+	}
+	
+	private String getNextTempFileName() {
+		return Integer.toString(counter++);
 	}
 }

@@ -14,7 +14,6 @@ public class Jdbc {
 	
 	private static Connection conn = null;
 	public static void init_db() throws SQLException {
-		new File(System.getProperty("catalina.home")+"/dbs").mkdirs();
         getConn();
         Statement statement = conn.createStatement();
         statement.executeUpdate(
@@ -27,7 +26,7 @@ public class Jdbc {
         Context ctx;
 		try {
 			ctx = new InitialContext();
-            DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/asst2");
+            DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/asst2marketdata");
             conn = ds.getConnection();
 		} catch (NamingException e) {
 			e.printStackTrace();

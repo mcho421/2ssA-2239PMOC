@@ -22,6 +22,7 @@ import org.jsefa.xml.XmlIOFactory;
 import org.jsefa.xml.XmlSerializer;
 import org.jsefa.xml.namespace.QName;
 
+import cs9322.rest.marketdata.init.Constants;
 import cs9322.rest.marketdata.model.Data;
 
 public class Jsefa {
@@ -31,7 +32,7 @@ public class Jsefa {
         File f = new File(url);
         String fileName = f.getName();
         fileName = fileName.replaceFirst("[.][^.]+$", "")+".xml";
-        String new_location = System.getProperty("catalina.home")+"/xml/"+fileName;
+        String new_location = Constants.instance.xmlFolderPath + "/" + fileName;
         config.setLineFilter(new HeaderAndFooterFilter(1, false, true));
         config.setFieldDelimiter(',');
 		Deserializer deserializer = CsvIOFactory.createFactory(config,Data.class).createDeserializer();

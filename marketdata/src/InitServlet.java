@@ -22,7 +22,6 @@ public class InitServlet extends HttpServlet {
     public InitServlet() throws SQLException {
         super();
         Jdbc.init_db();
-        new File(System.getProperty("catalina.home")+"/xml").mkdirs();
         // TODO Auto-generated constructor stub
     }
 
