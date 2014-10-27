@@ -21,7 +21,7 @@ import org.jsefa.xml.XmlIOFactory;
 import org.jsefa.xml.XmlSerializer;
 import org.jsefa.xml.namespace.QName;
 
-import cs9322.rest.marketdata.model.MarketData;
+import cs9322.rest.marketdata.model.Data;
 
 public class Jsefa {
 
@@ -29,8 +29,8 @@ public class Jsefa {
         CsvConfiguration config = new CsvConfiguration();
         config.setLineFilter(new HeaderAndFooterFilter(1, false, true));
         config.setFieldDelimiter(',');
-		Deserializer deserializer = CsvIOFactory.createFactory(config,MarketData.class).createDeserializer();
-		XmlSerializer serializer = XmlIOFactory.createFactory(MarketData.class).createSerializer();
+		Deserializer deserializer = CsvIOFactory.createFactory(config,Data.class).createDeserializer();
+		XmlSerializer serializer = XmlIOFactory.createFactory(Data.class).createSerializer();
 		Reader reader = new BufferedReader(new FileReader(url));
 		Writer writer = new PrintWriter("/Users/lan/Desktop/0.xml", "UTF-8");
 		serializer.open(writer);
@@ -38,7 +38,7 @@ public class Jsefa {
 		serializer.getLowLevelSerializer().writeStartElement(QName.create("MarketDatas"));
 		deserializer.open(reader);
 		while (deserializer.hasNext()) {
-		    MarketData m = deserializer.next();
+		    Data m = deserializer.next();
 		    serializer.write(m);
 		    System.out.println(m.getA_price());
 		}
@@ -48,13 +48,13 @@ public class Jsefa {
 		
 		return "";
 	}
-	public static List<MarketData> deserialize_xml(String url) throws FileNotFoundException {
-		List<MarketData> result =  new ArrayList<MarketData>();
-		XmlDeserializer deserializer = XmlIOFactory.createFactory(MarketData.class).createDeserializer();
+	public static List<Data> deserialize_xml(String url) throws FileNotFoundException {
+		List<Data> result =  new ArrayList<Data>();
+		XmlDeserializer deserializer = XmlIOFactory.createFactory(Data.class).createDeserializer();
 		Reader reader = new BufferedReader(new FileReader(url));
 		deserializer.open(reader);
 		while(deserializer.hasNext()) {
-			MarketData m = deserializer.next();
+			Data m = deserializer.next();
 			result.add(m);
 		}
 		deserializer.close(true);

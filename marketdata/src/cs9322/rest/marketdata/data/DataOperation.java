@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 import cs9322.rest.marketdata.model.EventData;
 
-public class Data {
+public class DataOperation {
 
 	public static EventData getEvent(String eventSetId) throws SQLException {
 		EventData ed = null;

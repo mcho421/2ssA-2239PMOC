@@ -13,7 +13,7 @@ public class EventData {
 	public void insertEvent() throws SQLException {
 		Connection conn = Jdbc.getConn();
 		Statement stmt = conn.createStatement();
-		stmt.executeUpdate("insert into events (eventsetid, xmllocation) values ('"+eventSetId+"','"+xmlLocation+"'')");
+		stmt.executeUpdate("insert into events (eventsetid, xmllocation) values ('"+eventSetId+"','"+xmlLocation+"')");
 		Jdbc.closeConn();
 	}
 	public String getEventSetId() {

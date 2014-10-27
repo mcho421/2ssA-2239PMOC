@@ -3,44 +3,54 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.jsefa.csv.annotation.*;
 import org.jsefa.xml.annotation.XmlDataType;
-import org.jsefa.xml.annotation.XmlElement;
 
 @XmlRootElement
 @CsvDataType()
-@XmlDataType(defaultElementName = "MarketDatas")
-public class MarketData {
+@XmlDataType(defaultElementName = "Data")
+public class Data {
+	@javax.xml.bind.annotation.XmlElement
 	@CsvField(pos = 1)
-	@XmlElement(pos = 1)
+	@org.jsefa.xml.annotation.XmlElement(pos = 1)
 	String ric;
+	@javax.xml.bind.annotation.XmlElement
 	@CsvField(pos = 2)
-	@XmlElement(pos = 2)
+	@org.jsefa.xml.annotation.XmlElement(pos = 2)
 	String date;
+	@javax.xml.bind.annotation.XmlElement
 	@CsvField(pos = 3)
-	@XmlElement(pos = 3)
+	@org.jsefa.xml.annotation.XmlElement(pos = 3)
 	String time;
+	@javax.xml.bind.annotation.XmlElement
 	@CsvField(pos = 4)
-	@XmlElement(pos = 4)
+	@org.jsefa.xml.annotation.XmlElement(pos = 4)
 	String GMT;
+	@javax.xml.bind.annotation.XmlElement
 	@CsvField(pos = 5)
-	@XmlElement(pos = 5)
+	@org.jsefa.xml.annotation.XmlElement(pos = 5)
 	String type;
+	@javax.xml.bind.annotation.XmlElement
 	@CsvField(pos = 6)
-	@XmlElement(pos = 6)
+	@org.jsefa.xml.annotation.XmlElement(pos = 6)
 	String price;
+	@javax.xml.bind.annotation.XmlElement
 	@CsvField(pos = 7)
-	@XmlElement(pos = 7)
+	@org.jsefa.xml.annotation.XmlElement(pos = 7)
 	String volume;
+	@javax.xml.bind.annotation.XmlElement
 	@CsvField(pos = 8)
-	@XmlElement(pos = 8)
+	@org.jsefa.xml.annotation.XmlElement(pos = 8)
 	String b_price;
+	@javax.xml.bind.annotation.XmlElement
 	@CsvField(pos = 9)
-	@XmlElement(pos = 9)
+	@org.jsefa.xml.annotation.XmlElement(pos = 9)
 	String b_size;
+	@javax.xml.bind.annotation.XmlElement
 	@CsvField(pos = 10)
-	@XmlElement(pos = 10)
+	@org.jsefa.xml.annotation.XmlElement(pos = 10)
 	String a_price;
+	@javax.xml.bind.annotation.XmlElement
 	@CsvField(pos = 11)
-	@XmlElement(pos = 11)
+	@org.jsefa.xml.annotation.XmlElement(pos = 11)
 	String a_size;
 	public String getRic() {
 		return ric;

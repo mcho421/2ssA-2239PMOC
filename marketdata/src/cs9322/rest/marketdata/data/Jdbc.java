@@ -20,7 +20,7 @@ public class Jdbc {
         statement.executeUpdate(
             "create table if not exists events (" +
                 "eventsetid string not null primary key, " +
-                "xmllocation string, )");
+                "xmllocation string)");
         closeConn();
 	}
 	public static Connection getConn() throws SQLException {
