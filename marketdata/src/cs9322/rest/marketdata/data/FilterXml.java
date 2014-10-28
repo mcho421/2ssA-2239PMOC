@@ -11,14 +11,13 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import cs9322.rest.marketdata.init.Constants;
+
 public class FilterXml {
-	
-	private static final String totalPriceXsltPath = "/Users/mathew/Developer/uni/postgrad/soa/xslexample/marketdatafiltertotalprice.xsl";
-	private static final String filterXsltPath = "/Users/mathew/Developer/uni/postgrad/soa/xslexample/marketdatafilter.xsl";
 	
 	public static void filterByType(String in_path, String out_path, String type) throws TransformerException {
 		TransformerFactory factory = TransformerFactory.newInstance();
-        Source xslt = new StreamSource(new File(filterXsltPath));
+        Source xslt = new StreamSource(new File(Constants.instance.filterXsltPath));
         Transformer transformer = factory.newTransformer(xslt);
 
         Source text = new StreamSource(new File(in_path));
@@ -28,7 +27,7 @@ public class FilterXml {
 
 	public static String totalPrice(String in_path, String type) throws TransformerException {
 		TransformerFactory factory = TransformerFactory.newInstance();
-        Source xslt = new StreamSource(new File(totalPriceXsltPath));
+        Source xslt = new StreamSource(new File(Constants.instance.totalPriceXsltPath));
         Transformer transformer = factory.newTransformer(xslt);
 
         Source text = new StreamSource(new File(in_path));

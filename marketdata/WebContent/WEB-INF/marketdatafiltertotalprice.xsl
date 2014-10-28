@@ -6,7 +6,7 @@
 <xsl:param name="type"/>
 
 <xsl:template match="/">
-<xsl:value-of select="sum(MarketData/Data/b_price[../type=$type])"/>
+<xsl:value-of select="sum(MarketData/Data/price[../type=$type])"/>
 </xsl:template>
 
 </xsl:stylesheet>
