@@ -23,4 +23,22 @@
     <servlet-name>Jersey REST Service</servlet-name>
     <url-pattern>/rest/*</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+	  <servlet-name>CashierServlet</servlet-name>
+	  <servlet-class>cs9322.rest.coffee.cashier.servlet.CashierServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+	  <servlet-name>CashierServlet</servlet-name>
+	  <url-pattern>/CashierServlet</url-pattern>
+  </servlet-mapping> 
+  
+  <servlet>
+	  <servlet-name>BaristaServlet</servlet-name>
+	  <servlet-class>cs9322.rest.coffee.barista.servlet.BaristaServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+	  <servlet-name>BaristaServlet</servlet-name>
+	  <url-pattern>/BaristaServlet</url-pattern>
+  </servlet-mapping> 
 </web-app>

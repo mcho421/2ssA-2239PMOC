@@ -30,14 +30,23 @@ public class Jdbc {
         closeConn();
 	}
 	public static Connection getConn() throws SQLException {
-        Context ctx;
+//        Context ctx;
+//		try {
+//			ctx = new InitialContext();
+//            DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/asst2");
+//            conn = ds.getConnection();
+//		} catch (NamingException e) {
+//			e.printStackTrace();
+//		}
 		try {
-			ctx = new InitialContext();
-            DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/asst2");
-            conn = ds.getConnection();
-		} catch (NamingException e) {
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		conn = DriverManager.getConnection("jdbc:sqlite:" + System.getProperty("catalina.base")+"/dbs/asst2.db");
+
         
 //		Class.forName("org.sqlite.JDBC");
 //		conn = DriverManager.getConnection("jdbc:sqlite:/Users/mathew/Developer/uni/postgrad/soa/ass2/cashier/WebContent/WEB-INF/asst2.db");

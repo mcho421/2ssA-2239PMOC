@@ -70,6 +70,10 @@ public class CashierServlet extends HttpServlet {
 		String page = "/cashier.jsp";
 		if (pageParam == null) {
 			page = "/cashier.jsp";
+			ClientResponse cresponse = addClientKey(service.path("rest").path("order")).
+					accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
+			System.out.println(cresponse.getHeaders());
+
 			List<OrderData> orders = addClientKey(service.path("rest").path("order")).
 					accept(MediaType.APPLICATION_XML).get(new GenericType<List<OrderData>>(){});
 			assert(orders != null);
@@ -219,10 +223,15 @@ public class CashierServlet extends HttpServlet {
 	
 	private static URI getBaseURI() {
 		return UriBuilder.fromUri(
-				"http://localhost:8080/cs9322.rest.coffee").build();
+				//"http://localhost:8080/cs9322.rest.coffee").build();
+				"http://mcho421.srvr:8880/cs9322.rest.coffee").build();
+
 	}
 	
 	private static Builder addClientKey(WebResource service) {
+    	System.setProperty("http.proxyHost", "mcho421.srvr");
+		System.setProperty("http.proxyPort", "80");
+
 		return service.header("key", "client");
 	}
 
