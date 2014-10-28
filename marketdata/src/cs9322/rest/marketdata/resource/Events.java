@@ -22,6 +22,7 @@ import cs9322.rest.marketdata.data.Jsefa;
 import cs9322.rest.marketdata.init.Constants;
 import cs9322.rest.marketdata.model.EventData;
 import cs9322.rest.marketdata.model.Data;
+import cs9322.rest.marketdata.model.MarketData;
 
 @Path("/{eventSetId}")
 public class Events {
@@ -46,7 +47,7 @@ public class Events {
 			return Response.status(Response.Status.CREATED.getStatusCode()).build();
 		}
 	}
-	public List<Data> getEvent(String eventSetId) throws SQLException, FileNotFoundException {
+	public MarketData getEvent(String eventSetId) throws SQLException, FileNotFoundException {
 		System.out.println(eventSetId);
 		EventData ed = DataOperation.getEvent(eventSetId);
 		if(ed == null)
@@ -54,25 +55,27 @@ public class Events {
 		else {
 			String xml_url = ed.getXmlLocation();
 			List<Data> result = Jsefa.deserialize_xml(xml_url);
-			return result;
+			MarketData m = new MarketData();
+			m.setMarketdata(result);
+			return m;
 		}
 	}
 
 	@GET
 	@Path("/xml")
 	@Produces(MediaType.APPLICATION_XML)
-	public List<Data> getEventXml (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException {
+	public MarketData getEventXml (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException {
 		return getEvent(eventSetId);
 	}
 
 	@GET
 	@Path("/json")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Data> getEventJson (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException {
+	public MarketData getEventJson (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException {
 		return getEvent(eventSetId);
 	}
 
-	public List<Data> getEventType (String eventSetId, String type) throws SQLException, FileNotFoundException, TransformerException {
+	public MarketData getEventType (String eventSetId, String type) throws SQLException, FileNotFoundException, TransformerException {
 		EventData ed = DataOperation.getEvent(eventSetId);
 		if(ed == null)
 			throw new WebApplicationException( Response.status(Response.Status.NOT_FOUND.getStatusCode()).build());
@@ -82,35 +85,37 @@ public class Events {
 			assert(new_url != null);
 			FilterXml.filterByType(xml_url, new_url, type);
 			List<Data> result = Jsefa.deserialize_xml(new_url);
-			return result;
+			MarketData m = new MarketData();
+			m.setMarketdata(result);
+			return m;
 		}
 	}
 
 	@GET
 	@Path("/trade/xml")
 	@Produces(MediaType.APPLICATION_XML)
-	public List<Data> getTradeEventXml (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException, TransformerException {
+	public MarketData getTradeEventXml (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException, TransformerException {
 		return getEventType(eventSetId, "Trade");
 	}
 
 	@GET
 	@Path("/trade/json")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Data> getTradeEventJson (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException, TransformerException {
+	public MarketData getTradeEventJson (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException, TransformerException {
 		return getEventType(eventSetId, "Trade");
 	}
 
 	@GET
 	@Path("/quote/xml")
 	@Produces(MediaType.APPLICATION_XML)
-	public List<Data> getQuoteEventXml (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException, TransformerException {
+	public MarketData getQuoteEventXml (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException, TransformerException {
 		return getEventType(eventSetId, "Quote");
 	}
 
 	@GET
 	@Path("/quote/json")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Data> getQuoteEventJson (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException, TransformerException {
+	public MarketData getQuoteEventJson (@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException, TransformerException {
 		return getEventType(eventSetId, "Quote");
 	}
 
