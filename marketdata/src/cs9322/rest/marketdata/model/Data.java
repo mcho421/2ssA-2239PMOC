@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.jsefa.csv.annotation.*;
 import org.jsefa.xml.annotation.XmlDataType;
 
-@XmlRootElement
+@XmlRootElement()
 @CsvDataType()
 @XmlDataType(defaultElementName = "Data")
 public class Data {
