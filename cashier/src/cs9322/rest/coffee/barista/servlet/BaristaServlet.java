@@ -141,7 +141,7 @@ public class BaristaServlet extends HttpServlet {
 	
 	private static URI getBaseURI() {
 		return UriBuilder.fromUri(
-				"http://localhost:8080/cs9322.rest.coffee.cashier").build();
+				"http://localhost:8080/cs9322.rest.coffee").build();
 	}
 	
 	private static Builder addBaristaKey(WebResource service) {

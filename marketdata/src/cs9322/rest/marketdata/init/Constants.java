@@ -8,8 +8,8 @@ public enum Constants {
 	public String convertedXmlFolderPath;
 
 	private Constants() {
-        xmlFolderPath = System.getProperty("catalina.home")+"/xml";
-        convertedXmlFolderPath = System.getProperty("catalina.home")+"/xml/converted";
+        xmlFolderPath = System.getProperty("catalina.base")+"/xml";
+        convertedXmlFolderPath = System.getProperty("catalina.base")+"/xml/converted";
         new File(xmlFolderPath).mkdirs();
         new File(convertedXmlFolderPath).mkdirs();
 	}

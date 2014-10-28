@@ -65,15 +65,40 @@ public class Order {
 				return  Response.status(Response.Status.FORBIDDEN.getStatusCode())
 						.entity("order can not be updated now.").build();
 			}
-			else if (type.equals(order.getType()) && additions.equals(order.getAdditions())) {
-				return Response.status(Response.Status.OK.getStatusCode()).entity(order).build();
+			else if (type != null && additions != null) {
+				if (type.equals(order.getType()) && additions.equals(order.getAdditions())) {
+					return Response.status(Response.Status.OK.getStatusCode()).entity(order).build();
+				}
+				else {
+					order.setType(type);
+					order.setAdditions(additions);
+					int cost = order.getType().length()+order.getAdditions().length();
+					order.setCost(""+cost);
+					order.updateOrder();
+					order = Data.getOrder(oid);
+					return Response.status(Response.Status.CREATED.getStatusCode()).entity(order).build();
+				}
 			}
+
 			else {
-				order.setType(type);
-				order.setAdditions(additions);
-				order.updateOrder();
-				order = Data.getOrder(oid);
-				return Response.status(Response.Status.CREATED.getStatusCode()).entity(order).build();
+				if(type == null && additions == null)
+					return Response.status(Response.Status.OK.getStatusCode()).entity(order).build();
+				else if (type == null) {
+					order.setAdditions(additions);
+					int cost = order.getType().length()+order.getAdditions().length();
+					order.setCost(""+cost);
+					order.updateOrder();
+					order = Data.getOrder(oid);
+					return Response.status(Response.Status.CREATED.getStatusCode()).entity(order).build();
+				}
+				else {
+					order.setType(type);
+					int cost = order.getType().length()+order.getAdditions().length();
+					order.setCost(""+cost);
+					order.updateOrder();
+					order = Data.getOrder(oid);
+					return Response.status(Response.Status.CREATED.getStatusCode()).entity(order).build();
+				}
 			}
 		}
 		else {
@@ -118,15 +143,40 @@ public class Order {
 				return  Response.status(Response.Status.FORBIDDEN.getStatusCode())
 						.entity("order can not be updated now.").build();
 			}
-			else if (type.equals(order.getType()) && additions.equals(order.getAdditions())) {
-				return Response.status(Response.Status.OK.getStatusCode()).entity(order).build();
+			else if (type != null && additions != null) {
+				if (type.equals(order.getType()) && additions.equals(order.getAdditions())) {
+					return Response.status(Response.Status.OK.getStatusCode()).entity(order).build();
+				}
+				else {
+					order.setType(type);
+					order.setAdditions(additions);
+					int cost = order.getType().length()+order.getAdditions().length();
+					order.setCost(""+cost);
+					order.updateOrder();
+					order = Data.getOrder(oid);
+					return Response.status(Response.Status.CREATED.getStatusCode()).entity(order).build();
+				}
 			}
+
 			else {
-				order.setType(type);
-				order.setAdditions(additions);
-				order.updateOrder();
-				order = Data.getOrder(oid);
-				return Response.status(Response.Status.CREATED.getStatusCode()).entity(order).build();
+				if(type == null && additions == null)
+					return Response.status(Response.Status.OK.getStatusCode()).entity(order).build();
+				else if (type == null) {
+					order.setAdditions(additions);
+					int cost = order.getType().length()+order.getAdditions().length();
+					order.setCost(""+cost);
+					order.updateOrder();
+					order = Data.getOrder(oid);
+					return Response.status(Response.Status.CREATED.getStatusCode()).entity(order).build();
+				}
+				else {
+					order.setType(type);
+					int cost = order.getType().length()+order.getAdditions().length();
+					order.setCost(""+cost);
+					order.updateOrder();
+					order = Data.getOrder(oid);
+					return Response.status(Response.Status.CREATED.getStatusCode()).entity(order).build();
+				}
 			}
 		}
 		else {
@@ -163,8 +213,8 @@ public class Order {
 			if (additions != null){
 				o.setAdditions(additions);
 			}
-			//todo calculate the cost
-			o.setCost("20");
+			int cost = o.getType().length()+o.getAdditions().length();
+			o.setCost(""+cost);
 			int id = 0;
 			id = o.insertOrder();
 			if(id == 0)

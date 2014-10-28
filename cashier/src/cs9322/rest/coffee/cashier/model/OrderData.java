@@ -44,7 +44,7 @@ public class OrderData {
 		Connection conn = Jdbc.getConn();
 		int id = Integer.parseInt(this.id);
 		Statement stmt = conn.createStatement();
-		stmt.execute("update orders set type='"+type+"', additions='"+additions+"'where id = '"+id+"'");
+		stmt.execute("update orders set cost = '"+cost+"',type='"+type+"', additions='"+additions+"'where id = '"+id+"'");
 		Jdbc.closeConn();
 	}
 	public void updateCoffee() throws SQLException, ClassNotFoundException{
