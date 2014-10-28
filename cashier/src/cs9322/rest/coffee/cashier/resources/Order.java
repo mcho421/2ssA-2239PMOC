@@ -222,7 +222,7 @@ public class Order {
 						.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
 						.entity("SQLite: insertion failed").build());
 			String retStr =  "<?xml version=\"1.0\"?>" + "<uri>" + 
-			"http://localhost:8080/cs9322.rest.coffee.cashier/rest/payment/"+id+ 
+			"http://mcho421.srvr:8880/cs9322.rest.coffee/rest/payment/"+id+ 
 			"</uri>"+"<cost>"+o.getCost()+"</cost>";
 			
 			return Response.status(Response.Status.CREATED.getStatusCode()).entity(retStr).build();

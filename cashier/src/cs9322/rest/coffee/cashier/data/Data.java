@@ -22,7 +22,7 @@ public class Data {
 			order.setType(rs.getString("type"));
 			order.setAdditions(rs.getString("additions"));
 			order.setCost(rs.getString("cost"));
-			order.setPayment_uri("http://localhost:8080/cs9322.rest.coffee.cashier/rest/payment/"+id);
+			order.setPayment_uri("http://mcho421.srvr:8880/cs9322.rest.coffee/rest/payment/"+id);
 			order.setP_status(rs.getString("p_status"));
 			order.setC_status(rs.getString("c_status"));
 		}
@@ -61,7 +61,7 @@ public class Data {
 			order.setType(rs.getString("type"));
 			order.setAdditions(rs.getString("additions"));
 			order.setCost(rs.getString("cost"));
-			order.setPayment_uri("http://localhost:8080/cs9322.rest.coffee.cashier/rest/payment/"+id);
+			order.setPayment_uri("http://mcho421.srvr:8880/cs9322.rest.coffee/rest/payment/"+id);
 			order.setP_status(rs.getString("p_status"));
 			order.setC_status(rs.getString("c_status"));
 			if(key.equals("barista")) {

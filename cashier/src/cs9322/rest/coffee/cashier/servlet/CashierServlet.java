@@ -70,9 +70,16 @@ public class CashierServlet extends HttpServlet {
 		String page = "/cashier.jsp";
 		if (pageParam == null) {
 			page = "/cashier.jsp";
-			ClientResponse cresponse = addClientKey(service.path("rest").path("order")).
-					accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
-			System.out.println(cresponse.getHeaders());
+//	        service = client.resource("http://mcho421.srvr:8880/cs9322.rest.coffee/rest/order");
+
+//			ClientResponse cresponse = addClientKey(service.path("rest").path("order")).
+//					accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
+//			ClientResponse cresponse = addClientKey(service).get(ClientResponse.class);
+//			System.out.println("foo");
+//
+//			System.out.println(cresponse.getHeaders());
+//			System.out.println(cresponse.getEntity(String.class));
+
 
 			List<OrderData> orders = addClientKey(service.path("rest").path("order")).
 					accept(MediaType.APPLICATION_XML).get(new GenericType<List<OrderData>>(){});
@@ -229,8 +236,8 @@ public class CashierServlet extends HttpServlet {
 	}
 	
 	private static Builder addClientKey(WebResource service) {
-    	System.setProperty("http.proxyHost", "mcho421.srvr");
-		System.setProperty("http.proxyPort", "80");
+    	System.setProperty("http.proxyHost", "http://mcho421.srvr");
+		System.setProperty("http.proxyPort", "8080");
 
 		return service.header("key", "client");
 	}

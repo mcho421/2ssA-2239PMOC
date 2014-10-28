@@ -147,6 +147,9 @@ public class BaristaServlet extends HttpServlet {
 	}
 	
 	private static Builder addBaristaKey(WebResource service) {
+    	System.setProperty("http.proxyHost", "http://mcho421.srvr");
+		System.setProperty("http.proxyPort", "8080");
+
 		return service.header("key", "barista");
 	}
 
