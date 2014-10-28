@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlAccessType;
-@XmlRootElement
+@XmlRootElement(name = "MarketData")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class MarketData {
 	@XmlElement(name = "Data")
