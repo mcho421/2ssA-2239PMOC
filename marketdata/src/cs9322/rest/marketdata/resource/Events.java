@@ -1,6 +1,7 @@
 package cs9322.rest.marketdata.resource;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.List;
@@ -25,12 +26,12 @@ import cs9322.rest.marketdata.model.Data;
 @Path("/{eventSetId}")
 public class Events {
 	
-	static String url_pattern = "/Users/mathew/Desktop/";
+	static String url_pattern = "http://vcas720.srvr.cse.unsw.edu.au/";
 	private static int counter = 1;
 
 	@PUT
 	public Response createEvent(
-			@PathParam("eventSetId") String eventSetId) throws SQLException, FileNotFoundException, UnsupportedEncodingException {
+			@PathParam("eventSetId") String eventSetId) throws SQLException, IOException {
 		EventData ed = DataOperation.getEvent(eventSetId);
 		if(ed != null)
 			return Response.status(Response.Status.OK.getStatusCode()).build();

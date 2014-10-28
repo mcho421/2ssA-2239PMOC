@@ -5,10 +5,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +31,7 @@ import cs9322.rest.marketdata.model.Data;
 
 public class Jsefa {
 
-	public static String convert_csv(String url) throws SQLException, FileNotFoundException, UnsupportedEncodingException {
+	public static String convert_csv(String url) throws SQLException, IOException {
         CsvConfiguration config = new CsvConfiguration();
         File f = new File(url);
         String fileName = f.getName();
@@ -37,7 +41,8 @@ public class Jsefa {
         config.setFieldDelimiter(',');
 		Deserializer deserializer = CsvIOFactory.createFactory(config,Data.class).createDeserializer();
 		XmlSerializer serializer = XmlIOFactory.createFactory(Data.class).createSerializer();
-		Reader reader = new BufferedReader(new FileReader(url));
+		URL file_url = new URL(url);
+		Reader reader = new BufferedReader(new InputStreamReader(file_url.openStream()));
 		Writer writer = new PrintWriter(new_location, "UTF-8");
 		serializer.open(writer);
 		serializer.getLowLevelSerializer().writeXmlDeclaration("1.0", "ISO-8859-1");
