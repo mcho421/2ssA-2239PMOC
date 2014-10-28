@@ -14,7 +14,7 @@ public class Jdbc {
 	
 	private static Connection conn = null;
 	public static void init_db() throws SQLException {
-		new File(System.getProperty("catalina.home")+"/dbs").mkdirs();
+		new File(System.getProperty("catalina.base")+"/dbs").mkdirs();
         getConn();
         Statement statement = conn.createStatement();
         statement.executeUpdate(
